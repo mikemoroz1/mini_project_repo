@@ -1,0 +1,61 @@
+---
+title: "Skeleton Document with Data"
+author: "Michael Moroz"
+format: html
+editor: visual
+---
+
+## The Skeleton Repo
+
+#### Disclaimer
+
+A repository and its corresponding R-project have been created to **complete** the 'skeleton' repository mini-project. Embedded within this R-project, I have decided to make my *own* questions that I will answer to demonstrate other relevant skills from the objective list. Making and answering these questions will allow me to make further commitments to the repository, allowing for clean and easy comprehension of my code.
+
+#### Question #1
+
+William is a student at the University of Chicago. William just finished taking three classes during the fall quarter, and needs help calculating and visualizing his GPA. The University of Chicago uses a standard A-grade conversion scale, where an 'A' equals a 4.00 GPA. William's classes and grades are as follows:
+
+**Causal Inference**: A- **Introduction to Python Programming**: B **From Data to Manuscript in R**: B+
+
+1.  Make a data frame with William's class, grade and quarter information.
+2.  Convert William's letter grades to a numeric GPA using the standard A-grade conversion scale.
+3.  Add William's letter grades as a column to the data frame.
+4.  Calculate William's fall quarter GPA.
+
+```{r}
+
+#| label: question-1
+
+library(tidyverse)
+
+william <- data.frame(Class = c("Causal Inference", "Introduction to Python Programming", "From Data to Manuscript in R"), Letter = c("A-", "B", "B+"), Quarter = c("Fall", "Fall", "Fall"))
+
+william <- william %>%
+  mutate(Numeric = case_when(Letter == "A" ~ 4.00, Letter == "A-" ~ 3.70, Letter == "B+" ~ 3.30, Letter == "B" ~ 3.00, Letter == "B-" ~ 2.70, Letter == "C+" ~ 2.30, Letter == "C" ~ 2.00, Letter == "C-" ~ 1.7, Letter == "D+" ~ 1.30, Letter == "D" ~ 1.00, Letter == "F" ~ 0.00))
+
+william <- william %>% relocate(Quarter, .after = Class)
+
+william_gpa = mean(william$Numeric)
+
+## All of the questions have been answered, and everything looks good. Now I'm going to do some simple checks to make sure the numeric calculations went properly using arithmetic and logical operators. 
+
+manual_check = ((william$Numeric[1] + william$Numeric[2] + william$Numeric[3]) / 3)
+
+equal_test = william_gpa|manual_check
+
+## Everything was done properly! Going to commit to the skeleton repository, then move to Question #2
+
+head(william)
+print(william_gpa)
+print(equal_test)
+
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
