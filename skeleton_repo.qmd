@@ -26,22 +26,25 @@ William is a student at the University of Chicago. William just finished taking 
 
 #| label: question-1
 
+## install.packages("tidyverse")
 library(tidyverse)
 
 william <- data.frame(Class = c("Causal Inference", "Introduction to Python Programming", "From Data to Manuscript in R"), Letter = c("A-", "B", "B+"), Quarter = c("Fall", "Fall", "Fall"))
 
 william <- william %>%
-  mutate(Numeric = case_when(Letter == "A" ~ 4.00, Letter == "A-" ~ 3.70, Letter == "B+" ~ 3.30, Letter == "B" ~ 3.00, Letter == "B-" ~ 2.70, Letter == "C+" ~ 2.30, Letter == "C" ~ 2.00, Letter == "C-" ~ 1.7, Letter == "D+" ~ 1.30, Letter == "D" ~ 1.00, Letter == "F" ~ 0.00))
+  mutate(Numeric = case_when(Letter == "A" ~ 4.00, Letter == "A-" ~ 3.70, Letter == "B+" ~ 3.30, Letter == "B" ~ 3.00, Letter == "B-" ~ 2.70, Letter == "C+" ~ 2.30, Letter == "C" ~ 2.00, Letter == "C-" ~ 1.70, Letter == "D+" ~ 1.30, Letter == "D" ~ 1.00, Letter == "F" ~ 0.00))
 
 william <- william %>% relocate(Quarter, .after = Class)
 
 william_gpa = mean(william$Numeric)
 
-## All of the questions have been answered, and everything looks good. Now I'm going to do some simple checks to make sure the numeric calculations went properly using arithmetic and logical operators. 
+william_gpa = round(william_gpa, 2)
 
-manual_check = ((william$Numeric[1] + william$Numeric[2] + william$Numeric[3]) / 3)
+## All of the questions have been answered, and everything looks good. Now I'm going to do some simple checks to make sure the numeric calculations went properly using arithmetic, comparison and logical operators. 
 
-equal_test = william_gpa|manual_check
+larger_test = william$Numeric[1] >= william_gpa
+
+equal_test = william_gpa|((william$Numeric[1] + william$Numeric[2] + william$Numeric[3]) / 3)
 
 ## Everything was done properly! Going to commit to the skeleton repository, then move to Question #2
 
@@ -51,11 +54,86 @@ print(equal_test)
 
 ```
 
-You can add options to executable code like this
+#### Question #2
+
+Write the newly created data frame to a csv.
 
 ```{r}
-#| echo: false
-2 * 2
+
+#| label: question-2
+
+## I will convert the table to a csv using the readr package.
+
+library(readr)
+
+write_csv(william, "Tables/william.csv")
+
+## Now this should have saved properly using a relative path in my 'Skeleton' folder.
+
+## Calling it now.
+
+will_data = read_csv("Tables/william.csv")
+
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+#### Question #3
+
+After long thought, William has decided he wants to go to law school. Some of his friends, Jonathan, Martin, Olivia, Isabella, Daniel, and Paige, are already in law school. Some of his other friends, Matthew, and Connor, are not in law school. William and his friends' grades and extracurricular activities are as follows:
+
+- William has a `r william_gpa` GPA, scored 167 on the LSAT, and participates in 2 extracurricular activities.
+- Jonathan had a 3.95 GPA, scored 176 on the LSAT, and participated in 5 extracurricular activities.
+- Martin had a 3.63 GPA, scored 170 on the LSAT, and participated in 2 extracurricular activities.
+- Olivia had a 3.99 GPA, scored 179 on the LSAT, and participated in 0 extracurricular activities.
+- Isabella had a 3.54 GPA, scored 168 on the LSAT, and participated in 3 extracurricular activities.
+- Daniel had a 3.77 GPA, score 171 on the LSAT, and participated in 4 extracurricular activities.
+- Paige had a 3.81 GPA, scored 175 on the LSAT, and participated in 2 extracurricular activities.
+- Matthew had a 3.13 GPA, scored 154 on the LSAT, and participated in 3 extracurricular activities.
+- Connor had a 3.31 GPA, scored 162 on the LSAT, and participated in 5 extracurricular activities. 
+
+1. Make a data frame including each person's name, GPA, LSAT, extracurricular activity participation and law school status as columns. 
+2. Run a regression to determine whether there are any significant predictors of law school admission, and identify your desired model.
+3. Plot your desired model and impose a line of best fit. 
+
+```{r}
+
+#| label: question-3
+
+## install.packages("ggplot2")
+library(ggplot2)
+
+admissions_data <- data.frame(Name = c("William", "Jonathan", "Martin", "Olivia", "Isabella", "Daniel", "Paige", "Matthew", "Connor"), GPA = c(william_gpa, 3.95, 3.63, 3.99, 3.54, 3.77, 3.81, 3.13, 3.31), LSAT = c(167, 176, 170, 179, 168, 171, 175, 154, 162), Extras = c(2, 5, 2, 0, 3, 4, 2, 3, 5), School = c(0, 1, 1, 1, 1, 1, 1, 0, 0))
+
+write_csv(admissions_data, "Tables/admissions_data.csv")
+
+## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not currently in law school, and 1 meaning the person is currently in law school). 
+
+## Now I will run a linear regression to identify significant indicators of law school status.
+## Code reference: https://www.datacamp.com/tutorial/linear-regression-R 
+
+lmLaw = lm(School ~ GPA + LSAT + Extras, data = admissions_data)
+# summary(lmLaw)
+
+## The overall regression model is a significant predictor of law school status at p < .05, but none of the individual predictors are significant. This indicates that one of my variables might be hiding the low effects of the others. I have a feeling it might be GPA, so I will test that now in the code below. 
+
+lmLaw2 = lm(School ~ GPA, data = admissions_data)
+summary(lmLaw2)
+
+## GPA is a significant predictor of law school status at p < .001. I can test other models, but I think GPA score is masking the effects of the others. I will quickly test LSAT on its own to see whether this is the case. 
+
+lmLaw3 = lm(School ~ LSAT, data = admissions_data)
+# summary(lmLaw3)
+
+## LSAT is also a significant predictor, but at p < .05, so it's not as strong as GPA as an individual predictor. Finally, I will test their interaction 
+
+lmLaw4 = lm(School ~ GPA + LSAT + GPA*LSAT, data = admissions_data)
+# summary(lmLaw4)
+
+## So the interaction is not significant, nor are GPA or LSAT as individual predictors, which suggests they both pull in different directions. I'm going to comment out the summary lines so my code chunk is easier to read, but you are welcome to test my other models and compare outputs. 
+
+## Finally, I'm going to plot my desired model (model #2, GPA as a sole predictor) and impose a line of best fit. 
+
+## Plotting
+## Code reference: https://www.geeksforgeeks.org/add-regression-line-to-ggplot2-plot-in-r/ 
+
+ggplot(admissions_data, aes(x = GPA, y = School)) + geom_point(color = "red") + stat_smooth(method = "lm", formula = y ~ x, geom = "smooth") + labs(x = "GPA", y = "Law School Status (1 = yes)", title = "Figure 1: Predicting Law School Status from GPA **") 
+```
