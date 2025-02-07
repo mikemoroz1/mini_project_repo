@@ -51,3 +51,9 @@ File Structure (Notice: [] denotes a folder)
     -   [Tables]
         -   admissions_data.csv
         -   william.csv
+
+Instructions to run code:
+
+1. Open the 'skeleton_repo.qmd' file and load the 'Skeleton.Rproj' in RStudio.
+2. Run all the code using 'Run All'
+3. Save any additions or changes and push to GitHub. 
