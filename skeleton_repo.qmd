@@ -22,7 +22,7 @@ William is a student at the University of Chicago. William just finished taking 
 3.  Add William's letter grades as a column to the data frame.
 4.  Calculate William's fall quarter GPA.
 
-```{r}
+```{r question-1}
 
 #| label: question-1
 
@@ -58,7 +58,7 @@ print(equal_test)
 
 Write the newly created data frame to a csv.
 
-```{r}
+```{r question-2}
 
 #| label: question-2
 
@@ -80,22 +80,22 @@ will_data = read_csv("Tables/william.csv")
 
 Ten years after graduation, William is currently unhappy in his job as a bank manager due to his monetary compensation. William believes he can make more money as a lawyer, but is unsure whether he should apply to law school. Some of his friends, Jonathan, Martin, Olivia, Isabella, Daniel, and Paige, are lawyers and graduated from law school. Some of his other friends, Matthew, and Connor, never went to law school and are perfectly happy in their careers. Information about William and his friends are as follows:
 
--   William had a `r william_gpa` GPA, scored 167 on the LSAT, and participated in 2 extracurricular activities. He currently makes \$63,002 as a non-lawyer.
+-   William had a `r william_gpa` GPA, scored 167 on the LSAT, and participated in 2 extracurricular activities. He currently makes \$63,002 as a bank manager.
 -   Jonathan had a 3.95 GPA, scored 176 on the LSAT, and participated in 5 extracurricular activities. He currently makes \$155,387 as a lawyer.
 -   Martin had a 3.63 GPA, scored 170 on the LSAT, and participated in 2 extracurricular activities. He currently makes \$122,098 as a lawyer.
 -   Olivia had a 3.99 GPA, scored 179 on the LSAT, and participated in 0 extracurricular activities. She currently makes \$113,000 as a lawyer.
 -   Isabella had a 3.54 GPA, scored 168 on the LSAT, and participated in 3 extracurricular activities. She currently makes \$105,000 as a lawyer.
 -   Daniel had a 3.77 GPA, score 171 on the LSAT, and participated in 4 extracurricular activities. He currently makes \$118,220 as a lawyer.
 -   Paige had a 3.81 GPA, scored 175 on the LSAT, and participated in 2 extracurricular activities. She currently makes \$94,562 as a lawyer.
--   Matthew had a 3.13 GPA, scored 154 on the LSAT, and participated in 3 extracurricular activities. He currently makes \$76,000 as a non-lawyer.
--   Connor had a 3.31 GPA, scored 162 on the LSAT, and participated in 5 extracurricular activities. He currently makes \$58,020 as a non-lawyer.
+-   Matthew had a 3.13 GPA, scored 154 on the LSAT, and participated in 3 extracurricular activities. He currently makes \$76,000 as a supermarket manager.
+-   Connor had a 3.31 GPA, scored 162 on the LSAT, and participated in 5 extracurricular activities. He currently makes \$58,020 as a mortgage analyst.
 
 1.  Make a data frame including each person's name, GPA, LSAT, extracurricular activity participation, salary and law school status as columns.
 2.  Run a regression to determine whether there are any significant predictors of salary.
 3.  Plot your desired model and impose a line of best fit.
 4.  Write up the results of your regression analysis.
 
-```{r}
+```{r question-3}
 
 #| label: question-3
 
@@ -109,6 +109,7 @@ write_csv(admissions_data, "Tables/admissions_data.csv")
 ## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not a lawyer, and 1 meaning the person is.  
 
 ## Now I will run a linear regression to identify significant indicators of salary.
+## Hypothesis: Law school status, but not the other predictors, will be a significant predictor of salary. 
 ## Code reference: https://www.datacamp.com/tutorial/linear-regression-R 
 
 lmSalary = lm(Salary ~ GPA + LSAT + Extras + School, data = admissions_data)
@@ -136,14 +137,85 @@ summary(lmSalary4)
 
 ggplot(admissions_data, aes(x = School, y = Salary)) + geom_point(color = "red") + stat_smooth(method = "lm", formula = y ~ x, geom = "smooth") + labs(x = "Attended Law School (0 = No)", y = "Salary (USD)", title = "Figure 1: Predicting Salary from Law School Status **")
 
-# summary(admissions_data$GPA)
-# summary(admissions_data$LSAT)
-# summary(admissions_data$Extras)
-# summary(admissions_data$Salary)
-# summary(admissions_data$School)
+summary(admissions_data$GPA)
+summary(admissions_data$LSAT)
+summary(admissions_data$Extras)
+summary(admissions_data$Salary)
+summary(admissions_data$School)
 
 ```
 
-Regression analyses were conducted on current and former University of Chicago students (n = 9) to investigate the effectiveness of predicting salary (*M* = 100,587, *SD* = 31,256) using measures of GPA (*M* = 3.61, *SD* = 0.30), LSAT score (*M* = 169.11, *SD* = 7.66), number of extracurricular activities (*M* = 2.89, *SD* = 1.62) and law school attendance (*M* = 0.67, *SD* = 0.5). The model did not significantly account for variance of salary in the data, R^2^ = .82, *F*(4, 4) = 4.46, p = .088. Since neither of GPA, LSAT score, number of extracurricular activities, or law school attendance accounted for significant variance in salary when all compiled in the model, additional analyses were tested measuring the efficacy of each individual predictor. When tested in a singular model, law school attendance accounted for 70% of the variance in salary in the data, R^2^ = .70, *F*(1, 7) = 16.48, p \< .01.
+Regression analyses were conducted on current and former University of Chicago students (n = 9) to investigate the effectiveness of predicting salary (*M* = 100,587, *SD* = 31,256) using measures of GPA (*M* = 3.61, *SD* = 0.30), LSAT score (*M* = 169.11, *SD* = 7.66), number of extracurricular activities (*M* = 2.89, *SD* = 1.62) and law school attendance (attended = 6, non-attended = 3). The model did not significantly account for variance of salary in the data, R^2^ = .82, *F*(4, 4) = 4.46, p = .088. Since neither of GPA, LSAT score, number of extracurricular activities, or law school attendance accounted for significant variance in salary when all compiled in the model, additional analyses were tested measuring the efficacy of each individual predictor. When tested in a singular model, law school attendance accounted for 70% of the variance in salary in the data, R^2^ = .70, *F*(1, 7) = 16.48, p \< .01.
 
-The estimate of the coefficient for law school attendance was *b* = 52,370, *s~b~* = 12,902, *t*(7) = 4.06, *p* = .004. This indicates that going to law school is associated with a \$52,370 jump in salary as opposed to not having gone to law school. Based on data from this data set, William would greatly increase his earning potential by attending law school and becoming a lawyer.
+The estimate of the coefficient for law school attendance was *b* = 52,370, *s~b~* = 12,902, *t*(7) = 4.06, *p* = .004. This indicates that going to law school is associated with a \$52,370 jump in salary as opposed to not having gone to law school. Based on data from this data set, our main hypothesis is supported in that William would greatly increase his earning potential by attending law school and becoming a lawyer.
+
+#### Question #4
+
+William has three other friends that are medical doctors. Their information are as follows:
+
+-   Tyrell had a 3.91 GPA, never took the LSAT, and participated in 5 extracurricular activities. He currently makes \$388,267 as a cardiologist.
+-   Savannah had a 3.85 GPA, never took the LSAT, and participated in 4 extracurricular activities. She currently makes \$422,001 as an oncologist.
+-   Gerald had a 3.89 GPA, never took the LSAT, and participated in 3 extracurricular activities. He currently makes \$543,022 as a dermatologist.
+
+1.  Add William's doctor friends to the data frame.
+2.  Perform an ANOVA to determine whether there are differences in salary between lawyers, doctors, and non-lawyers or non-doctors.
+3.  Plot the results.
+
+```{r question-4}
+
+#| label: question-4
+
+## Now I need to modify my data set so it accurately reflects the updated information. 
+## I will code the new friends as "2" in the School column to reflect their status as attended medical school, and NA in the LSAT column to reflect that they never took the LSAT.
+
+admissions_data = tibble(admissions_data)
+
+doctor_rows = data.frame(Name = c("Tyrell", "Savannah", "Gerald"), GPA = c(3.91, 3.85, 3.89), LSAT = c(NA, NA, NA), Extras = c(5, 4, 3), Salary = c(388267, 422001, 543022), School = c(2, 2, 2))
+
+admissions_data = admissions_data %>%
+  rbind(doctor_rows)
+
+## Performing the ANOVA
+## Hypothesis: There are significant differences between groups on salary.
+## Code reference: https://www.scribbr.com/statistics/anova-in-r/ and https://stackoverflow.com/questions/31443521/modifying-y-axis-with-ggplot2 
+
+anova = aov(Salary ~ School, data = admissions_data)
+summary(anova)
+
+## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. 
+
+## Plotting the results
+
+library(scales)
+
+ggplot(admissions_data, aes(x = School, y = Salary)) + geom_point() + labs(x = "School Type (0 = Other, 1 = Law, 2 = Medical)", y = "Salary (USD)", title = "Figure 2: Salary from School Type") + stat_summary(fun.data = 'mean_se', geom = 'errorbar', width = 0.2) + scale_y_continuous(labels=comma) + scale_x_continuous(breaks = unique(admissions_data$School))
+
+```
+
+#### Question 5
+
+Use a code chunk and R-Markdown to demonstrate in-line code, lists, and footnotes in Markdown.
+
+```{r question-5}
+
+#| label: question-5
+
+## Making a list that I can read in R Markdown
+
+mikes_list = list("Michael", "Douglas")
+
+dog_age = (5)
+
+ownership = (dog_age - 1)
+
+birthplace = "Phoenix, Arizona"
+
+lived_locations = list("Phoenix", "Minneapolis", "Edmonton")
+
+current_location = "Chicago"
+
+```
+
+My name is **`r mikes_list[1]`** and I have a dog named *`r mikes_list[2]`*. `r mikes_list[2]` just turned `r dog_age` and I adopted him `r ownership` years ago. `r mikes_list[2]` is originally from `r birthplace` and he is the absolute best! Interestingly, `r mikes_list[2]` is not the only one who is well-traveled. I have lived in `r lived_locations[1:2]` and `r lived_locations[3]`[^1] prior to moving to `r current_location`!
+
+[^1]: Edmonton, Alberta, is a city in Canada.
