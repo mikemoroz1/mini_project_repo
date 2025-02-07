@@ -8,19 +8,23 @@ editor_options:
 
 This is a 'skeleton' repository that is being used for the purposes of
 completing a repository-based mini-project in From Data to Manuscript in
-R.
+R. There are no specific research questions that I am testing in
+preparation for my final project.
 
 All of the data in the repository are artificial and do not contain any
-information about real people. Any overlaps between this repository's
-data and real people are merely coincidental.
+information about real people (other than one question using information
+about myself). Any overlaps between this repository's data and real
+people are merely coincidental. The data are just being used to complete
+objectives from the objective list.
 
 All 'csv' output has been saved to the 'Tables' folder located within
 the main repository. The 'Skeleton.Rproj' and 'skeleton_repo.qmd' files
-in the main repository are all that are required to successfuly run the
+in the main repository are all that are required to successfully run the
 code. The 'skeleton_repo_files' folder contains information related to
-rendering the code into a Markdown document.
+rendering the code into a Markdown document, in addition to figures that
+were generated in the code.
 
-File Structure (Notice: [] denotes a folder)
+**File Structure (Notice: [] denotes a folder)**
 
 -   [mini-project-repo]
     -   .gitignore
@@ -52,8 +56,9 @@ File Structure (Notice: [] denotes a folder)
         -   admissions_data.csv
         -   william.csv
 
-Instructions to run code:
+**Instructions to run code:**
 
-1. Open the 'skeleton_repo.qmd' file and load the 'Skeleton.Rproj' in RStudio.
-2. Run all the code using 'Run All'
-3. Save any additions or changes and push to GitHub. 
+1.  Open the 'skeleton_repo.qmd' file and load the 'Skeleton.Rproj' in
+    RStudio.
+2.  Run all the code using 'Run All'
+3.  Save any additions or changes and push to GitHub.

@@ -29,14 +29,22 @@ William is a student at the University of Chicago. William just finished taking 
 ## install.packages("tidyverse")
 library(tidyverse)
 
+## Making the data frame
+
 william <- data.frame(Class = c("Causal Inference", "Introduction to Python Programming", "From Data to Manuscript in R"), Letter = c("A-", "B", "B+"), Quarter = c("Fall", "Fall", "Fall"))
 
 william <- william %>%
   mutate(Numeric = case_when(Letter == "A" ~ 4.00, Letter == "A-" ~ 3.70, Letter == "B+" ~ 3.30, Letter == "B" ~ 3.00, Letter == "B-" ~ 2.70, Letter == "C+" ~ 2.30, Letter == "C" ~ 2.00, Letter == "C-" ~ 1.70, Letter == "D+" ~ 1.30, Letter == "D" ~ 1.00, Letter == "F" ~ 0.00))
 
+## Moving Quarter after Class so it looks better aesthetically.
+
 william <- william %>% relocate(Quarter, .after = Class)
 
+## Calculating William's GPA
+
 william_gpa = mean(william$Numeric)
+
+## Rounding GPA to two decimals
 
 william_gpa = round(william_gpa, 2)
 
@@ -137,6 +145,8 @@ summary(lmSalary4)
 
 ggplot(admissions_data, aes(x = School, y = Salary)) + geom_point(color = "red") + stat_smooth(method = "lm", formula = y ~ x, geom = "smooth") + labs(x = "Attended Law School (0 = No)", y = "Salary (USD)", title = "Figure 1: Predicting Salary from Law School Status **")
 
+## Summary statistics
+
 summary(admissions_data$GPA)
 summary(admissions_data$LSAT)
 summary(admissions_data$Extras)
@@ -185,6 +195,7 @@ summary(anova)
 ## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. 
 
 ## Plotting the results
+## Using the scales package because it allows me to change x and y axis ticks quite efficiently.
 
 library(scales)
 
@@ -192,7 +203,7 @@ ggplot(admissions_data, aes(x = School, y = Salary)) + geom_point() + labs(x = "
 
 ```
 
-#### Question 5
+#### Question #5
 
 Use a code chunk and R-Markdown to demonstrate in-line code, lists, and footnotes in Markdown.
 
@@ -202,15 +213,28 @@ Use a code chunk and R-Markdown to demonstrate in-line code, lists, and footnote
 
 ## Making a list that I can read in R Markdown
 
+## I'm going to make a simple list that includes my name and my dog's name.
+
 mikes_list = list("Michael", "Douglas")
+
+## Making a variable with my dog's age (5 years old).
 
 dog_age = (5)
 
+## Making a new variable about how long I've had my dog.
+
 ownership = (dog_age - 1)
+
+## Making a string variable with my dog's birthplace.
 
 birthplace = "Phoenix, Arizona"
 
+## Making a list of locations I have lived prior to moving to Chicago.
+## Technically Edmonton is not totally correct but it's the nearest city, so I will use that here.
+
 lived_locations = list("Phoenix", "Minneapolis", "Edmonton")
+
+## Finally, making a string variable that lists where I currently live. 
 
 current_location = "Chicago"
 
@@ -219,3 +243,62 @@ current_location = "Chicago"
 My name is **`r mikes_list[1]`** and I have a dog named *`r mikes_list[2]`*. `r mikes_list[2]` just turned `r dog_age` and I adopted him `r ownership` years ago. `r mikes_list[2]` is originally from `r birthplace` and he is the absolute best! Interestingly, `r mikes_list[2]` is not the only one who is well-traveled. I have lived in `r lived_locations[1:2]` and `r lived_locations[3]`[^1] prior to moving to `r current_location`!
 
 [^1]: Edmonton, Alberta, is a city in Canada.
+
+#### Question #6
+
+Make a mathematical function that calculates GPA with any desired input.
+
+```{r question-6}
+
+#| label: question-6
+
+## Making the function
+## Ok so I'm going to make a function where you have to input someone's name, the quarter they just completed, and the numeric grades of their three classes. It will take the average of those three classes and produce it in a paste statement. 
+## Code reference: https://www.geeksforgeeks.org/types-of-functions-in-r-programming/ 
+
+gpa_calculator = function(name, quarter, class1, class2, class3) {
+  paste(name, "had a", round(((class1 + class2+ class3)/3), 2), "GPA during the", quarter, "quarter")
+}
+
+## Checking the efficacy of my function using my fictional "William" data earlier. 
+
+gpa_calculator("William", "Fall", 3.3, 3.0, 3.7)
+
+## Testing the function with other input. 
+
+gpa_calculator("Diana", "Winter", 4.0, 3.3, 3.7)
+
+## Everything appears to have worked out. 
+
+```
+
+#### Question #7
+
+Practice your loop skills by using multiple loops in the same chunk of code.
+
+```{r question-7}
+
+#| label: question-7
+
+## So I used a case_when() statement in a dplyr pipeline earlier, but now I want to try combining loops to see if I can get it to work. 
+## I'm going to do something pretty simple and use while and for loops to count my age backwards. Then before it reaches 0, I will have it list the year I was born.  
+## Code reference: https://www.w3schools.com/r/r_while_loop.asp 
+
+mikes_age = 22
+start_year = 2024
+
+while (mikes_age > 1) {
+  mikes_age = mikes_age - 1
+  start_year = start_year - 1
+  print(paste("Michael used to be", mikes_age, "in", start_year))
+  if (mikes_age == 1) {
+    print(paste("Michael was born in 2002"))
+  }
+}
+
+## Everything appears to have worked out! 
+
+```
+
+
+

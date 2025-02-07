@@ -136,26 +136,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>william <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Class =</span> <span class="fu">c</span>(<span class="st">"Causal Inference"</span>, <span class="st">"Introduction to Python Programming"</span>, <span class="st">"From Data to Manuscript in R"</span>), <span class="at">Letter =</span> <span class="fu">c</span>(<span class="st">"A-"</span>, <span class="st">"B"</span>, <span class="st">"B+"</span>), <span class="at">Quarter =</span> <span class="fu">c</span>(<span class="st">"Fall"</span>, <span class="st">"Fall"</span>, <span class="st">"Fall"</span>))</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Making the data frame</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>william <span class="ot">&lt;-</span> william <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Numeric =</span> <span class="fu">case_when</span>(Letter <span class="sc">==</span> <span class="st">"A"</span> <span class="sc">~</span> <span class="fl">4.00</span>, Letter <span class="sc">==</span> <span class="st">"A-"</span> <span class="sc">~</span> <span class="fl">3.70</span>, Letter <span class="sc">==</span> <span class="st">"B+"</span> <span class="sc">~</span> <span class="fl">3.30</span>, Letter <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">~</span> <span class="fl">3.00</span>, Letter <span class="sc">==</span> <span class="st">"B-"</span> <span class="sc">~</span> <span class="fl">2.70</span>, Letter <span class="sc">==</span> <span class="st">"C+"</span> <span class="sc">~</span> <span class="fl">2.30</span>, Letter <span class="sc">==</span> <span class="st">"C"</span> <span class="sc">~</span> <span class="fl">2.00</span>, Letter <span class="sc">==</span> <span class="st">"C-"</span> <span class="sc">~</span> <span class="fl">1.70</span>, Letter <span class="sc">==</span> <span class="st">"D+"</span> <span class="sc">~</span> <span class="fl">1.30</span>, Letter <span class="sc">==</span> <span class="st">"D"</span> <span class="sc">~</span> <span class="fl">1.00</span>, Letter <span class="sc">==</span> <span class="st">"F"</span> <span class="sc">~</span> <span class="fl">0.00</span>))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>william <span class="ot">&lt;-</span> william <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(Quarter, <span class="at">.after =</span> Class)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>william <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Class =</span> <span class="fu">c</span>(<span class="st">"Causal Inference"</span>, <span class="st">"Introduction to Python Programming"</span>, <span class="st">"From Data to Manuscript in R"</span>), <span class="at">Letter =</span> <span class="fu">c</span>(<span class="st">"A-"</span>, <span class="st">"B"</span>, <span class="st">"B+"</span>), <span class="at">Quarter =</span> <span class="fu">c</span>(<span class="st">"Fall"</span>, <span class="st">"Fall"</span>, <span class="st">"Fall"</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>william <span class="ot">&lt;-</span> william <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Numeric =</span> <span class="fu">case_when</span>(Letter <span class="sc">==</span> <span class="st">"A"</span> <span class="sc">~</span> <span class="fl">4.00</span>, Letter <span class="sc">==</span> <span class="st">"A-"</span> <span class="sc">~</span> <span class="fl">3.70</span>, Letter <span class="sc">==</span> <span class="st">"B+"</span> <span class="sc">~</span> <span class="fl">3.30</span>, Letter <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">~</span> <span class="fl">3.00</span>, Letter <span class="sc">==</span> <span class="st">"B-"</span> <span class="sc">~</span> <span class="fl">2.70</span>, Letter <span class="sc">==</span> <span class="st">"C+"</span> <span class="sc">~</span> <span class="fl">2.30</span>, Letter <span class="sc">==</span> <span class="st">"C"</span> <span class="sc">~</span> <span class="fl">2.00</span>, Letter <span class="sc">==</span> <span class="st">"C-"</span> <span class="sc">~</span> <span class="fl">1.70</span>, Letter <span class="sc">==</span> <span class="st">"D+"</span> <span class="sc">~</span> <span class="fl">1.30</span>, Letter <span class="sc">==</span> <span class="st">"D"</span> <span class="sc">~</span> <span class="fl">1.00</span>, Letter <span class="sc">==</span> <span class="st">"F"</span> <span class="sc">~</span> <span class="fl">0.00</span>))</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>william_gpa <span class="ot">=</span> <span class="fu">mean</span>(william<span class="sc">$</span>Numeric)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Moving Quarter after Class so it looks better aesthetically.</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>william_gpa <span class="ot">=</span> <span class="fu">round</span>(william_gpa, <span class="dv">2</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>william <span class="ot">&lt;-</span> william <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(Quarter, <span class="at">.after =</span> Class)</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="do">## All of the questions have been answered, and everything looks good. Now I'm going to do some simple checks to make sure the numeric calculations went properly using arithmetic, comparison and logical operators. </span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Calculating William's GPA</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>larger_test <span class="ot">=</span> william<span class="sc">$</span>Numeric[<span class="dv">1</span>] <span class="sc">&gt;=</span> william_gpa</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>william_gpa <span class="ot">=</span> <span class="fu">mean</span>(william<span class="sc">$</span>Numeric)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>equal_test <span class="ot">=</span> william_gpa<span class="sc">|</span>((william<span class="sc">$</span>Numeric[<span class="dv">1</span>] <span class="sc">+</span> william<span class="sc">$</span>Numeric[<span class="dv">2</span>] <span class="sc">+</span> william<span class="sc">$</span>Numeric[<span class="dv">3</span>]) <span class="sc">/</span> <span class="dv">3</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Rounding GPA to two decimals</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything was done properly! Going to commit to the skeleton repository, then move to Question #2</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>william_gpa <span class="ot">=</span> <span class="fu">round</span>(william_gpa, <span class="dv">2</span>)</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(william)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="do">## All of the questions have been answered, and everything looks good. Now I'm going to do some simple checks to make sure the numeric calculations went properly using arithmetic, comparison and logical operators. </span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>larger_test <span class="ot">=</span> william<span class="sc">$</span>Numeric[<span class="dv">1</span>] <span class="sc">&gt;=</span> william_gpa</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>equal_test <span class="ot">=</span> william_gpa<span class="sc">|</span>((william<span class="sc">$</span>Numeric[<span class="dv">1</span>] <span class="sc">+</span> william<span class="sc">$</span>Numeric[<span class="dv">2</span>] <span class="sc">+</span> william<span class="sc">$</span>Numeric[<span class="dv">3</span>]) <span class="sc">/</span> <span class="dv">3</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything was done properly! Going to commit to the skeleton repository, then move to Question #2</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(william)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                               Class Quarter Letter Numeric
 1                   Causal Inference    Fall     A-     3.7
@@ -287,7 +295,9 @@ F-statistic: 16.48 on 1 and 7 DF,  p-value: 0.004814</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>GPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Summary statistics</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>GPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   3.130   3.330   3.630   3.607   3.810   3.990 </code></pre>
@@ -358,8 +368,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. </span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Plotting the results</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Using the scales package because it allows me to change x and y axis ticks quite efficiently.</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'scales'</code></pre>
@@ -385,26 +396,116 @@ Attaching package: 'scales'</code></pre>
 </div>
 </section>
 <section id="question-5" class="level4">
-<h4 class="anchored" data-anchor-id="question-5">Question 5</h4>
+<h4 class="anchored" data-anchor-id="question-5">Question #5</h4>
 <p>Use a code chunk and R-Markdown to demonstrate in-line code, lists, and footnotes in Markdown.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-5</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a list that I can read in R Markdown</span></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>mikes_list <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Michael"</span>, <span class="st">"Douglas"</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to make a simple list that includes my name and my dog's name.</span></span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>dog_age <span class="ot">=</span> (<span class="dv">5</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>mikes_list <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Michael"</span>, <span class="st">"Douglas"</span>)</span>
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>ownership <span class="ot">=</span> (dog_age <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a variable with my dog's age (5 years old).</span></span>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>birthplace <span class="ot">=</span> <span class="st">"Phoenix, Arizona"</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>dog_age <span class="ot">=</span> (<span class="dv">5</span>)</span>
 <span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>lived_locations <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Phoenix"</span>, <span class="st">"Minneapolis"</span>, <span class="st">"Edmonton"</span>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a new variable about how long I've had my dog.</span></span>
 <span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>current_location <span class="ot">=</span> <span class="st">"Chicago"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>ownership <span class="ot">=</span> (dog_age <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a string variable with my dog's birthplace.</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>birthplace <span class="ot">=</span> <span class="st">"Phoenix, Arizona"</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a list of locations I have lived prior to moving to Chicago.</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Technically Edmonton is not totally correct but it's the nearest city, so I will use that here.</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>lived_locations <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Phoenix"</span>, <span class="st">"Minneapolis"</span>, <span class="st">"Edmonton"</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="do">## Finally, making a string variable that lists where I currently live. </span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>current_location <span class="ot">=</span> <span class="st">"Chicago"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>My name is <strong>Michael</strong> and I have a dog named <em>Douglas</em>. Douglas just turned 5 and I adopted him 4 years ago. Douglas is originally from Phoenix, Arizona and he is the absolute best! Interestingly, Douglas is not the only one who is well-traveled. I have lived in Phoenix, Minneapolis and Edmonton<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> prior to moving to Chicago!</p>
+</section>
+<section id="question-6" class="level4">
+<h4 class="anchored" data-anchor-id="question-6">Question #6</h4>
+<p>Make a mathematical function that calculates GPA with any desired input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-6</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Making the function</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok so I'm going to make a function where you have to input someone's name, the quarter they just completed, and the numeric grades of their three classes. It will take the average of those three classes and produce it in a paste statement. </span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.geeksforgeeks.org/types-of-functions-in-r-programming/ </span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>gpa_calculator <span class="ot">=</span> <span class="cf">function</span>(name, quarter, class1, class2, class3) {</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(name, <span class="st">"had a"</span>, <span class="fu">round</span>(((class1 <span class="sc">+</span> class2<span class="sc">+</span> class3)<span class="sc">/</span><span class="dv">3</span>), <span class="dv">2</span>), <span class="st">"GPA during the"</span>, quarter, <span class="st">"quarter"</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Checking the efficacy of my function using my fictional "William" data earlier. </span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">gpa_calculator</span>(<span class="st">"William"</span>, <span class="st">"Fall"</span>, <span class="fl">3.3</span>, <span class="fl">3.0</span>, <span class="fl">3.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "William had a 3.33 GPA during the Fall quarter"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Testing the function with other input. </span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gpa_calculator</span>(<span class="st">"Diana"</span>, <span class="st">"Winter"</span>, <span class="fl">4.0</span>, <span class="fl">3.3</span>, <span class="fl">3.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Diana had a 3.67 GPA during the Winter quarter"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything appears to have worked out. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="question-7" class="level4">
+<h4 class="anchored" data-anchor-id="question-7">Question #7</h4>
+<p>Practice your loop skills by using multiple loops in the same chunk of code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-7</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="do">## So I used a case_when() statement in a dplyr pipeline earlier, but now I want to try combining loops to see if I can get it to work. </span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to do something pretty simple and use while and for loops to count my age backwards. Then before it reaches 0, I will have it list the year I was born.  </span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.w3schools.com/r/r_while_loop.asp </span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>mikes_age <span class="ot">=</span> <span class="dv">22</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>start_year <span class="ot">=</span> <span class="dv">2024</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (mikes_age <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  mikes_age <span class="ot">=</span> mikes_age <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  start_year <span class="ot">=</span> start_year <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Michael used to be"</span>, mikes_age, <span class="st">"in"</span>, start_year))</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (mikes_age <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Michael was born in 2002"</span>))</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Michael used to be 21 in 2023"
+[1] "Michael used to be 20 in 2022"
+[1] "Michael used to be 19 in 2021"
+[1] "Michael used to be 18 in 2020"
+[1] "Michael used to be 17 in 2019"
+[1] "Michael used to be 16 in 2018"
+[1] "Michael used to be 15 in 2017"
+[1] "Michael used to be 14 in 2016"
+[1] "Michael used to be 13 in 2015"
+[1] "Michael used to be 12 in 2014"
+[1] "Michael used to be 11 in 2013"
+[1] "Michael used to be 10 in 2012"
+[1] "Michael used to be 9 in 2011"
+[1] "Michael used to be 8 in 2010"
+[1] "Michael used to be 7 in 2009"
+[1] "Michael used to be 6 in 2008"
+[1] "Michael used to be 5 in 2007"
+[1] "Michael used to be 4 in 2006"
+[1] "Michael used to be 3 in 2005"
+[1] "Michael used to be 2 in 2004"
+[1] "Michael used to be 1 in 2003"
+[1] "Michael was born in 2002"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything appears to have worked out! </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 
