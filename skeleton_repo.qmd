@@ -78,21 +78,22 @@ will_data = read_csv("Tables/william.csv")
 
 #### Question #3
 
-After long thought, William has decided he wants to go to law school. Some of his friends, Jonathan, Martin, Olivia, Isabella, Daniel, and Paige, are already in law school. Some of his other friends, Matthew, and Connor, are not in law school. William and his friends' grades and extracurricular activities are as follows:
+Ten years after graduation, William is currently unhappy in his job as a bank manager due to his monetary compensation. William believes he can make more money as a lawyer, but is unsure whether he should apply to law school. Some of his friends, Jonathan, Martin, Olivia, Isabella, Daniel, and Paige, are lawyers and graduated from law school. Some of his other friends, Matthew, and Connor, never went to law school and are perfectly happy in their careers. Information about William and his friends are as follows:
 
-- William has a `r william_gpa` GPA, scored 167 on the LSAT, and participates in 2 extracurricular activities.
-- Jonathan had a 3.95 GPA, scored 176 on the LSAT, and participated in 5 extracurricular activities.
-- Martin had a 3.63 GPA, scored 170 on the LSAT, and participated in 2 extracurricular activities.
-- Olivia had a 3.99 GPA, scored 179 on the LSAT, and participated in 0 extracurricular activities.
-- Isabella had a 3.54 GPA, scored 168 on the LSAT, and participated in 3 extracurricular activities.
-- Daniel had a 3.77 GPA, score 171 on the LSAT, and participated in 4 extracurricular activities.
-- Paige had a 3.81 GPA, scored 175 on the LSAT, and participated in 2 extracurricular activities.
-- Matthew had a 3.13 GPA, scored 154 on the LSAT, and participated in 3 extracurricular activities.
-- Connor had a 3.31 GPA, scored 162 on the LSAT, and participated in 5 extracurricular activities. 
+-   William had a `r william_gpa` GPA, scored 167 on the LSAT, and participated in 2 extracurricular activities. He currently makes \$63,002 as a non-lawyer.
+-   Jonathan had a 3.95 GPA, scored 176 on the LSAT, and participated in 5 extracurricular activities. He currently makes \$155,387 as a lawyer.
+-   Martin had a 3.63 GPA, scored 170 on the LSAT, and participated in 2 extracurricular activities. He currently makes \$122,098 as a lawyer.
+-   Olivia had a 3.99 GPA, scored 179 on the LSAT, and participated in 0 extracurricular activities. She currently makes \$113,000 as a lawyer.
+-   Isabella had a 3.54 GPA, scored 168 on the LSAT, and participated in 3 extracurricular activities. She currently makes \$105,000 as a lawyer.
+-   Daniel had a 3.77 GPA, score 171 on the LSAT, and participated in 4 extracurricular activities. He currently makes \$118,220 as a lawyer.
+-   Paige had a 3.81 GPA, scored 175 on the LSAT, and participated in 2 extracurricular activities. She currently makes \$94,562 as a lawyer.
+-   Matthew had a 3.13 GPA, scored 154 on the LSAT, and participated in 3 extracurricular activities. He currently makes \$76,000 as a non-lawyer.
+-   Connor had a 3.31 GPA, scored 162 on the LSAT, and participated in 5 extracurricular activities. He currently makes \$58,020 as a non-lawyer.
 
-1. Make a data frame including each person's name, GPA, LSAT, extracurricular activity participation and law school status as columns. 
-2. Run a regression to determine whether there are any significant predictors of law school admission, and identify your desired model.
-3. Plot your desired model and impose a line of best fit. 
+1.  Make a data frame including each person's name, GPA, LSAT, extracurricular activity participation, salary and law school status as columns.
+2.  Run a regression to determine whether there are any significant predictors of salary.
+3.  Plot your desired model and impose a line of best fit.
+4.  Write up the results of your regression analysis.
 
 ```{r}
 
@@ -101,39 +102,48 @@ After long thought, William has decided he wants to go to law school. Some of hi
 ## install.packages("ggplot2")
 library(ggplot2)
 
-admissions_data <- data.frame(Name = c("William", "Jonathan", "Martin", "Olivia", "Isabella", "Daniel", "Paige", "Matthew", "Connor"), GPA = c(william_gpa, 3.95, 3.63, 3.99, 3.54, 3.77, 3.81, 3.13, 3.31), LSAT = c(167, 176, 170, 179, 168, 171, 175, 154, 162), Extras = c(2, 5, 2, 0, 3, 4, 2, 3, 5), School = c(0, 1, 1, 1, 1, 1, 1, 0, 0))
+admissions_data <- data.frame(Name = c("William", "Jonathan", "Martin", "Olivia", "Isabella", "Daniel", "Paige", "Matthew", "Connor"), GPA = c(william_gpa, 3.95, 3.63, 3.99, 3.54, 3.77, 3.81, 3.13, 3.31), LSAT = c(167, 176, 170, 179, 168, 171, 175, 154, 162), Extras = c(2, 5, 2, 0, 3, 4, 2, 3, 5), Salary = c(63002, 155387, 122098, 113000, 105000, 118220, 94562, 76000, 58020), School = c(0, 1, 1, 1, 1, 1, 1, 0, 0))
 
 write_csv(admissions_data, "Tables/admissions_data.csv")
 
-## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not currently in law school, and 1 meaning the person is currently in law school). 
+## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not a lawyer, and 1 meaning the person is.  
 
-## Now I will run a linear regression to identify significant indicators of law school status.
+## Now I will run a linear regression to identify significant indicators of salary.
 ## Code reference: https://www.datacamp.com/tutorial/linear-regression-R 
 
-lmLaw = lm(School ~ GPA + LSAT + Extras, data = admissions_data)
-# summary(lmLaw)
+lmSalary = lm(Salary ~ GPA + LSAT + Extras + School, data = admissions_data)
+# summary(lmSalary)
 
-## The overall regression model is a significant predictor of law school status at p < .05, but none of the individual predictors are significant. This indicates that one of my variables might be hiding the low effects of the others. I have a feeling it might be GPA, so I will test that now in the code below. 
+## None of my predictors are significant in the full model, nor is the full model itself at p < .05. I will make some modifications to see whether I can uncover some of the variance. 
 
-lmLaw2 = lm(School ~ GPA, data = admissions_data)
-summary(lmLaw2)
+lmSalary2 = lm(Salary ~ GPA + LSAT + School, data = admissions_data)
+# summary(lmSalary2)
 
-## GPA is a significant predictor of law school status at p < .001. I can test other models, but I think GPA score is masking the effects of the others. I will quickly test LSAT on its own to see whether this is the case. 
+## Now the model is significant, but none of my predictors are. I will try dropping LSAT score.
 
-lmLaw3 = lm(School ~ LSAT, data = admissions_data)
-# summary(lmLaw3)
+lmSalary3 = lm(Salary ~ GPA + School, data = admissions_data)
+# summary(lmSalary3)
 
-## LSAT is also a significant predictor, but at p < .05, so it's not as strong as GPA as an individual predictor. Finally, I will test their interaction 
+## To see the final model, I will drop GPA. 
 
-lmLaw4 = lm(School ~ GPA + LSAT + GPA*LSAT, data = admissions_data)
-# summary(lmLaw4)
+lmSalary4 = lm(Salary ~ School, data = admissions_data)
+summary(lmSalary4)
 
-## So the interaction is not significant, nor are GPA or LSAT as individual predictors, which suggests they both pull in different directions. I'm going to comment out the summary lines so my code chunk is easier to read, but you are welcome to test my other models and compare outputs. 
-
-## Finally, I'm going to plot my desired model (model #2, GPA as a sole predictor) and impose a line of best fit. 
+## So now we see that attending law school is a significant predictor of earning a higher salary in my hypothetical data set. Time to plot the data!
 
 ## Plotting
 ## Code reference: https://www.geeksforgeeks.org/add-regression-line-to-ggplot2-plot-in-r/ 
 
-ggplot(admissions_data, aes(x = GPA, y = School)) + geom_point(color = "red") + stat_smooth(method = "lm", formula = y ~ x, geom = "smooth") + labs(x = "GPA", y = "Law School Status (1 = yes)", title = "Figure 1: Predicting Law School Status from GPA **") 
+ggplot(admissions_data, aes(x = School, y = Salary)) + geom_point(color = "red") + stat_smooth(method = "lm", formula = y ~ x, geom = "smooth") + labs(x = "Attended Law School (0 = No)", y = "Salary (USD)", title = "Figure 1: Predicting Salary from Law School Status **")
+
+# summary(admissions_data$GPA)
+# summary(admissions_data$LSAT)
+# summary(admissions_data$Extras)
+# summary(admissions_data$Salary)
+# summary(admissions_data$School)
+
 ```
+
+Regression analyses were conducted on current and former University of Chicago students (n = 9) to investigate the effectiveness of predicting salary (*M* = 100,587, *SD* = 31,256) using measures of GPA (*M* = 3.61, *SD* = 0.30), LSAT score (*M* = 169.11, *SD* = 7.66), number of extracurricular activities (*M* = 2.89, *SD* = 1.62) and law school attendance (*M* = 0.67, *SD* = 0.5). The model did not significantly account for variance of salary in the data, R^2^ = .82, *F*(4, 4) = 4.46, p = .088. Since neither of GPA, LSAT score, number of extracurricular activities, or law school attendance accounted for significant variance in salary when all compiled in the model, additional analyses were tested measuring the efficacy of each individual predictor. When tested in a single model, law school attendance accounted for 70% of the variance in salary in the data, R^2^ = .70, *F*(1, 7) = 16.48, p \< .01.
+
+The estimate of the coefficient for law school attendance was *b* = 52,370, *s~b~* = 12,902, *t*(7) = 4.06, *p* = .004. This indicates that going to law school is associated with a \$52,370 jump in salary as opposed to not having gone to law school at all. Based on data from this data set, William would greatly increase his earning potential by attending law school and becoming a lawyer.
