@@ -207,6 +207,15 @@ dbl (1): Numeric
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(will_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+  Class                              Quarter Letter Numeric
+  &lt;chr&gt;                              &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;
+1 Causal Inference                   Fall    A-         3.7
+2 Introduction to Python Programming Fall    B          3  
+3 From Data to Manuscript in R       Fall    B+         3.3</code></pre>
+</div>
 </div>
 </section>
 <section id="question-3" class="level4">
@@ -230,38 +239,38 @@ dbl (1): Numeric
 <li>Write up the results of your regression analysis.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-3</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="do">## install.packages("ggplot2")</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"William"</span>, <span class="st">"Jonathan"</span>, <span class="st">"Martin"</span>, <span class="st">"Olivia"</span>, <span class="st">"Isabella"</span>, <span class="st">"Daniel"</span>, <span class="st">"Paige"</span>, <span class="st">"Matthew"</span>, <span class="st">"Connor"</span>), <span class="at">GPA =</span> <span class="fu">c</span>(william_gpa, <span class="fl">3.95</span>, <span class="fl">3.63</span>, <span class="fl">3.99</span>, <span class="fl">3.54</span>, <span class="fl">3.77</span>, <span class="fl">3.81</span>, <span class="fl">3.13</span>, <span class="fl">3.31</span>), <span class="at">LSAT =</span> <span class="fu">c</span>(<span class="dv">167</span>, <span class="dv">176</span>, <span class="dv">170</span>, <span class="dv">179</span>, <span class="dv">168</span>, <span class="dv">171</span>, <span class="dv">175</span>, <span class="dv">154</span>, <span class="dv">162</span>), <span class="at">Extras =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>), <span class="at">Salary =</span> <span class="fu">c</span>(<span class="dv">63002</span>, <span class="dv">155387</span>, <span class="dv">122098</span>, <span class="dv">113000</span>, <span class="dv">105000</span>, <span class="dv">118220</span>, <span class="dv">94562</span>, <span class="dv">76000</span>, <span class="dv">58020</span>), <span class="at">School =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(admissions_data, <span class="st">"Tables/admissions_data.csv"</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="do">## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not a lawyer, and 1 meaning the person is.  </span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I will run a linear regression to identify significant indicators of salary.</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Hypothesis: Law school status, but not the other predictors, will be a significant predictor of salary. </span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.datacamp.com/tutorial/linear-regression-R </span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>lmSalary <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> GPA <span class="sc">+</span> LSAT <span class="sc">+</span> Extras <span class="sc">+</span> School, <span class="at">data =</span> admissions_data)</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(lmSalary)</span></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="do">## None of my predictors are significant in the full model, nor is the full model itself at p &lt; .05. I will make some modifications to see whether I can uncover some of the variance. </span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>lmSalary2 <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> GPA <span class="sc">+</span> LSAT <span class="sc">+</span> School, <span class="at">data =</span> admissions_data)</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(lmSalary2)</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="do">## Now the model is significant, but none of my predictors are. I will try dropping LSAT score.</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>lmSalary3 <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> GPA <span class="sc">+</span> School, <span class="at">data =</span> admissions_data)</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(lmSalary3)</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="do">## To see the final model, I will drop GPA. </span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>lmSalary4 <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> School, <span class="at">data =</span> admissions_data)</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmSalary4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-3</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">## install.packages("ggplot2")</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"William"</span>, <span class="st">"Jonathan"</span>, <span class="st">"Martin"</span>, <span class="st">"Olivia"</span>, <span class="st">"Isabella"</span>, <span class="st">"Daniel"</span>, <span class="st">"Paige"</span>, <span class="st">"Matthew"</span>, <span class="st">"Connor"</span>), <span class="at">GPA =</span> <span class="fu">c</span>(william_gpa, <span class="fl">3.95</span>, <span class="fl">3.63</span>, <span class="fl">3.99</span>, <span class="fl">3.54</span>, <span class="fl">3.77</span>, <span class="fl">3.81</span>, <span class="fl">3.13</span>, <span class="fl">3.31</span>), <span class="at">LSAT =</span> <span class="fu">c</span>(<span class="dv">167</span>, <span class="dv">176</span>, <span class="dv">170</span>, <span class="dv">179</span>, <span class="dv">168</span>, <span class="dv">171</span>, <span class="dv">175</span>, <span class="dv">154</span>, <span class="dv">162</span>), <span class="at">Extras =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>), <span class="at">Salary =</span> <span class="fu">c</span>(<span class="dv">63002</span>, <span class="dv">155387</span>, <span class="dv">122098</span>, <span class="dv">113000</span>, <span class="dv">105000</span>, <span class="dv">118220</span>, <span class="dv">94562</span>, <span class="dv">76000</span>, <span class="dv">58020</span>), <span class="at">School =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(admissions_data, <span class="st">"Tables/admissions_data.csv"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="do">## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not a lawyer, and 1 meaning the person is.  </span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I will run a linear regression to identify significant indicators of salary.</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Hypothesis: Law school status, but not the other predictors, will be a significant predictor of salary. </span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.datacamp.com/tutorial/linear-regression-R </span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>lmSalary <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> GPA <span class="sc">+</span> LSAT <span class="sc">+</span> Extras <span class="sc">+</span> School, <span class="at">data =</span> admissions_data)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(lmSalary)</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="do">## None of my predictors are significant in the full model, nor is the full model itself at p &lt; .05. I will make some modifications to see whether I can uncover some of the variance. </span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>lmSalary2 <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> GPA <span class="sc">+</span> LSAT <span class="sc">+</span> School, <span class="at">data =</span> admissions_data)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(lmSalary2)</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="do">## Now the model is significant, but none of my predictors are. I will try dropping LSAT score.</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>lmSalary3 <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> GPA <span class="sc">+</span> School, <span class="at">data =</span> admissions_data)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(lmSalary3)</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="do">## To see the final model, I will drop GPA. </span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>lmSalary4 <span class="ot">=</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> School, <span class="at">data =</span> admissions_data)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmSalary4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -282,12 +291,12 @@ Residual standard error: 18250 on 7 degrees of freedom
 Multiple R-squared:  0.7018,    Adjusted R-squared:  0.6592 
 F-statistic: 16.48 on 1 and 7 DF,  p-value: 0.004814</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## So now we see that attending law school is a significant predictor of earning a higher salary in my hypothetical data set. Time to plot the data!</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Plotting</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.geeksforgeeks.org/add-regression-line-to-ggplot2-plot-in-r/ </span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(admissions_data, <span class="fu">aes</span>(<span class="at">x =</span> School, <span class="at">y =</span> Salary)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">geom =</span> <span class="st">"smooth"</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Attended Law School (0 = No)"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 1: Predicting Salary from Law School Status **"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## So now we see that attending law school is a significant predictor of earning a higher salary in my hypothetical data set. Time to plot the data!</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Plotting</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.geeksforgeeks.org/add-regression-line-to-ggplot2-plot-in-r/ </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(admissions_data, <span class="fu">aes</span>(<span class="at">x =</span> School, <span class="at">y =</span> Salary)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">geom =</span> <span class="st">"smooth"</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Attended Law School (0 = No)"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 1: Predicting Salary from Law School Status **"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -295,29 +304,29 @@ F-statistic: 16.48 on 1 and 7 DF,  p-value: 0.004814</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Summary statistics</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>GPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Summary statistics</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>GPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   3.130   3.330   3.630   3.607   3.810   3.990 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>LSAT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>LSAT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   154.0   167.0   170.0   169.1   175.0   179.0 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>Extras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>Extras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   0.000   2.000   3.000   2.889   4.000   5.000 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>Salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>Salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   58020   76000  105000  100588  118220  155387 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>School)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(admissions_data<span class="sc">$</span>School)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
  0.0000  0.0000  1.0000  0.6667  1.0000  1.0000 </code></pre>
@@ -340,24 +349,24 @@ F-statistic: 16.48 on 1 and 7 DF,  p-value: 0.004814</code></pre>
 <li>Plot the results.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-4</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I need to modify my data set so it accurately reflects the updated information. </span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="do">## I will code the new friends as "2" in the School column to reflect their status as attended medical school, and NA in the LSAT column to reflect that they never took the LSAT.</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">=</span> <span class="fu">tibble</span>(admissions_data)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>doctor_rows <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"Tyrell"</span>, <span class="st">"Savannah"</span>, <span class="st">"Gerald"</span>), <span class="at">GPA =</span> <span class="fu">c</span>(<span class="fl">3.91</span>, <span class="fl">3.85</span>, <span class="fl">3.89</span>), <span class="at">LSAT =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">Extras =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>), <span class="at">Salary =</span> <span class="fu">c</span>(<span class="dv">388267</span>, <span class="dv">422001</span>, <span class="dv">543022</span>), <span class="at">School =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">=</span> admissions_data <span class="sc">%&gt;%</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(doctor_rows)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Performing the ANOVA</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Hypothesis: There are significant differences between groups on salary.</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.scribbr.com/statistics/anova-in-r/ and https://stackoverflow.com/questions/31443521/modifying-y-axis-with-ggplot2 </span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>anova <span class="ot">=</span> <span class="fu">aov</span>(Salary <span class="sc">~</span> School, <span class="at">data =</span> admissions_data)</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-4</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I need to modify my data set so it accurately reflects the updated information. </span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="do">## I will code the new friends as "2" in the School column to reflect their status as attended medical school, and NA in the LSAT column to reflect that they never took the LSAT.</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">=</span> <span class="fu">tibble</span>(admissions_data)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>doctor_rows <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"Tyrell"</span>, <span class="st">"Savannah"</span>, <span class="st">"Gerald"</span>), <span class="at">GPA =</span> <span class="fu">c</span>(<span class="fl">3.91</span>, <span class="fl">3.85</span>, <span class="fl">3.89</span>), <span class="at">LSAT =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">Extras =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>), <span class="at">Salary =</span> <span class="fu">c</span>(<span class="dv">388267</span>, <span class="dv">422001</span>, <span class="dv">543022</span>), <span class="at">School =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">=</span> admissions_data <span class="sc">%&gt;%</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(doctor_rows)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Performing the ANOVA</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Hypothesis: There are significant differences between groups on salary.</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.scribbr.com/statistics/anova-in-r/ and https://stackoverflow.com/questions/31443521/modifying-y-axis-with-ggplot2 </span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>anova <span class="ot">=</span> <span class="fu">aov</span>(Salary <span class="sc">~</span> School, <span class="at">data =</span> admissions_data)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Df    Sum Sq   Mean Sq F value   Pr(&gt;F)    
 School       1 2.228e+11 2.228e+11   29.84 0.000276 ***
@@ -365,12 +374,12 @@ Residuals   10 7.466e+10 7.466e+09
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. </span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Plotting the results</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Using the scales package because it allows me to change x and y axis ticks quite efficiently.</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. </span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Plotting the results</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Using the scales package because it allows me to change x and y axis ticks quite efficiently.</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'scales'</code></pre>
@@ -385,7 +394,7 @@ Attaching package: 'scales'</code></pre>
 
     col_factor</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(admissions_data, <span class="fu">aes</span>(<span class="at">x =</span> School, <span class="at">y =</span> Salary)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"School Type (0 = Other, 1 = Law, 2 = Medical)"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 2: Salary from School Type"</span>) <span class="sc">+</span> <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> <span class="st">'mean_se'</span>, <span class="at">geom =</span> <span class="st">'errorbar'</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>comma) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">unique</span>(admissions_data<span class="sc">$</span>School))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(admissions_data, <span class="fu">aes</span>(<span class="at">x =</span> School, <span class="at">y =</span> Salary)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"School Type (0 = Other, 1 = Law, 2 = Medical)"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 2: Salary from School Type"</span>) <span class="sc">+</span> <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> <span class="st">'mean_se'</span>, <span class="at">geom =</span> <span class="st">'errorbar'</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>comma) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">unique</span>(admissions_data<span class="sc">$</span>School))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -399,34 +408,34 @@ Attaching package: 'scales'</code></pre>
 <h4 class="anchored" data-anchor-id="question-5">Question #5</h4>
 <p>Use a code chunk and R-Markdown to demonstrate in-line code, lists, and footnotes in Markdown.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-5</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a list that I can read in R Markdown</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to make a simple list that includes my name and my dog's name.</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>mikes_list <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Michael"</span>, <span class="st">"Douglas"</span>)</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a variable with my dog's age (5 years old).</span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>dog_age <span class="ot">=</span> (<span class="dv">5</span>)</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a new variable about how long I've had my dog.</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>ownership <span class="ot">=</span> (dog_age <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a string variable with my dog's birthplace.</span></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>birthplace <span class="ot">=</span> <span class="st">"Phoenix, Arizona"</span></span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a list of locations I have lived prior to moving to Chicago.</span></span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Technically Edmonton is not totally correct but it's the nearest city, so I will use that here.</span></span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>lived_locations <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Phoenix"</span>, <span class="st">"Minneapolis"</span>, <span class="st">"Edmonton"</span>)</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="do">## Finally, making a string variable that lists where I currently live. </span></span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>current_location <span class="ot">=</span> <span class="st">"Chicago"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-5</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a list that I can read in R Markdown</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to make a simple list that includes my name and my dog's name.</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>mikes_list <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Michael"</span>, <span class="st">"Douglas"</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a variable with my dog's age (5 years old).</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>dog_age <span class="ot">=</span> (<span class="dv">5</span>)</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a new variable about how long I've had my dog.</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>ownership <span class="ot">=</span> (dog_age <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a string variable with my dog's birthplace.</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>birthplace <span class="ot">=</span> <span class="st">"Phoenix, Arizona"</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Making a list of locations I have lived prior to moving to Chicago.</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Technically Edmonton is not totally correct but it's the nearest city, so I will use that here.</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>lived_locations <span class="ot">=</span> <span class="fu">list</span>(<span class="st">"Phoenix"</span>, <span class="st">"Minneapolis"</span>, <span class="st">"Edmonton"</span>)</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="do">## Finally, making a string variable that lists where I currently live. </span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>current_location <span class="ot">=</span> <span class="st">"Chicago"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>My name is <strong>Michael</strong> and I have a dog named <em>Douglas</em>. Douglas just turned 5 and I adopted him 4 years ago. Douglas is originally from Phoenix, Arizona and he is the absolute best! Interestingly, Douglas is not the only one who is well-traveled. I have lived in Phoenix, Minneapolis and Edmonton<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> prior to moving to Chicago!</p>
 </section>
@@ -434,52 +443,52 @@ Attaching package: 'scales'</code></pre>
 <h4 class="anchored" data-anchor-id="question-6">Question #6</h4>
 <p>Make a mathematical function that calculates GPA with any desired input.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-6</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Making the function</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok so I'm going to make a function where you have to input someone's name, the quarter they just completed, and the numeric grades of their three classes. It will take the average of those three classes and produce it in a paste statement. </span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.geeksforgeeks.org/types-of-functions-in-r-programming/ </span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>gpa_calculator <span class="ot">=</span> <span class="cf">function</span>(name, quarter, class1, class2, class3) {</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(name, <span class="st">"had a"</span>, <span class="fu">round</span>(((class1 <span class="sc">+</span> class2<span class="sc">+</span> class3)<span class="sc">/</span><span class="dv">3</span>), <span class="dv">2</span>), <span class="st">"GPA during the"</span>, quarter, <span class="st">"quarter"</span>)</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Checking the efficacy of my function using my fictional "William" data earlier. </span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">gpa_calculator</span>(<span class="st">"William"</span>, <span class="st">"Fall"</span>, <span class="fl">3.3</span>, <span class="fl">3.0</span>, <span class="fl">3.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-6</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Making the function</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok so I'm going to make a function where you have to input someone's name, the quarter they just completed, and the numeric grades of their three classes. It will take the average of those three classes and produce it in a paste statement. </span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.geeksforgeeks.org/types-of-functions-in-r-programming/ </span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>gpa_calculator <span class="ot">=</span> <span class="cf">function</span>(name, quarter, class1, class2, class3) {</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(name, <span class="st">"had a"</span>, <span class="fu">round</span>(((class1 <span class="sc">+</span> class2<span class="sc">+</span> class3)<span class="sc">/</span><span class="dv">3</span>), <span class="dv">2</span>), <span class="st">"GPA during the"</span>, quarter, <span class="st">"quarter"</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Checking the efficacy of my function using my fictional "William" data earlier. </span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="fu">gpa_calculator</span>(<span class="st">"William"</span>, <span class="st">"Fall"</span>, <span class="fl">3.3</span>, <span class="fl">3.0</span>, <span class="fl">3.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "William had a 3.33 GPA during the Fall quarter"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Testing the function with other input. </span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gpa_calculator</span>(<span class="st">"Diana"</span>, <span class="st">"Winter"</span>, <span class="fl">4.0</span>, <span class="fl">3.3</span>, <span class="fl">3.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Testing the function with other input. </span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gpa_calculator</span>(<span class="st">"Diana"</span>, <span class="st">"Winter"</span>, <span class="fl">4.0</span>, <span class="fl">3.3</span>, <span class="fl">3.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Diana had a 3.67 GPA during the Winter quarter"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything appears to have worked out. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything appears to have worked out. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="question-7" class="level4">
 <h4 class="anchored" data-anchor-id="question-7">Question #7</h4>
 <p>Practice your loop skills by using multiple loops in the same chunk of code.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-7</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="do">## So I used a case_when() statement in a dplyr pipeline earlier, but now I want to try combining loops to see if I can get it to work. </span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to do something pretty simple and use while and for loops to count my age backwards. Then before it reaches 0, I will have it list the year I was born.  </span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.w3schools.com/r/r_while_loop.asp </span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>mikes_age <span class="ot">=</span> <span class="dv">22</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>start_year <span class="ot">=</span> <span class="dv">2024</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (mikes_age <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  mikes_age <span class="ot">=</span> mikes_age <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  start_year <span class="ot">=</span> start_year <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Michael used to be"</span>, mikes_age, <span class="st">"in"</span>, start_year))</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (mikes_age <span class="sc">==</span> <span class="dv">1</span>) {</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Michael was born in 2002"</span>))</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-7</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="do">## So I used a case_when() statement in a dplyr pipeline earlier, but now I want to try combining loops to see if I can get it to work. </span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to do something pretty simple and use while and for loops to count my age backwards. Then before it reaches 0, I will have it list the year I was born.  </span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.w3schools.com/r/r_while_loop.asp </span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>mikes_age <span class="ot">=</span> <span class="dv">22</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>start_year <span class="ot">=</span> <span class="dv">2024</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (mikes_age <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  mikes_age <span class="ot">=</span> mikes_age <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  start_year <span class="ot">=</span> start_year <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Michael used to be"</span>, mikes_age, <span class="st">"in"</span>, start_year))</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (mikes_age <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Michael was born in 2002"</span>))</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Michael used to be 21 in 2023"
 [1] "Michael used to be 20 in 2022"
@@ -504,43 +513,99 @@ Attaching package: 'scales'</code></pre>
 [1] "Michael used to be 1 in 2003"
 [1] "Michael was born in 2002"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything appears to have worked out! </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything appears to have worked out! </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="question-8" class="level4">
 <h4 class="anchored" data-anchor-id="question-8">Question #8</h4>
 <p>Use dplyr and tidyr functions to modify the ‘admissions_data’ data set, then combine them together in one data transformation pipeline.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-8</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="do">## First I'm going to use three different dplyr functions to work with the data: mutate, select and arrange. </span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to use mutate to add a new column that adds an age for each person in the data set.</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">=</span> admissions_data <span class="sc">%&gt;%</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Age =</span> <span class="fu">c</span>(<span class="dv">22</span>, <span class="dv">28</span>, <span class="dv">29</span>, <span class="dv">26</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">28</span>, <span class="dv">23</span>, <span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">37</span>, <span class="dv">33</span>))</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to use select to pick three variables and add them to a new data set. </span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> admissions_data <span class="sc">%&gt;%</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Name, Age, Salary)</span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Next I'm going to use arrange to change the order of the rows in the newly created 'general_data' data set. </span></span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Name)</span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Now the data set is organized alphabetically from A to Z. </span></span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Moving ahead, I'm going to use a tidyr function to change the layout of the newly created data set.</span></span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
-<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(Age) </span>
-<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to use a combination of tidyr and dplyr functions to fix the 'general_data' data set back to its original form, and this time sort by age from lowest to highest. </span></span>
-<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
-<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"name"</span>, <span class="at">values_from =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(Age) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-8</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="do">## First I'm going to use three different dplyr functions to work with the data: mutate, select and arrange. </span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="do">## I'm going to use mutate to add a new column that adds an age for each person in the data set.</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">=</span> admissions_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Age =</span> <span class="fu">c</span>(<span class="dv">22</span>, <span class="dv">28</span>, <span class="dv">29</span>, <span class="dv">26</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">28</span>, <span class="dv">23</span>, <span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">37</span>, <span class="dv">33</span>))</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to use select to pick three variables and add them to a new data set. </span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> admissions_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Name, Age, Salary)</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Next I'm going to use arrange to change the order of the rows in the newly created 'general_data' data set. </span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Name)</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Now the data set is organized alphabetically from A to Z. </span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Moving ahead, I'm going to use a tidyr function to change the layout of the newly created data set.</span></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(Age) </span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to use a combination of tidyr and dplyr functions to fix the 'general_data' data set back to its original form, and this time sort by age from lowest to highest. </span></span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"name"</span>, <span class="at">values_from =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(Age) </span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(general_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 3
+   Name     Salary   Age
+   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1 William   63002    22
+ 2 Matthew   76000    23
+ 3 Connor    58020    25
+ 4 Isabella 105000    26
+ 5 Olivia   113000    26
+ 6 Daniel   118220    27
+ 7 Jonathan 155387    28
+ 8 Paige     94562    28
+ 9 Martin   122098    29
+10 Gerald   543022    33
+11 Tyrell   388267    35
+12 Savannah 422001    37</code></pre>
+</div>
+</div>
+</section>
+<section id="question-9" class="level4">
+<h4 class="anchored" data-anchor-id="question-9">Question #9</h4>
+<p>Use ‘stringr’ functions to transform the data at your own discretion.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-9</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I am going to have some fun with the data and use stringr functions to get some better insights into the data. </span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="do">## First I want to understand how many characters are in each person's name. I can do this using str_length. </span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://stringr.tidyverse.org </span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str_length</span>(general_data<span class="sc">$</span>Name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 7 7 6 8 6 6 8 5 6 6 6 8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Interesting. Now I'm going to replace longer names with shorter names (for example, change "William" to "Will". I will do this for William, Matthew, Isabella, and Jonathan. </span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace_all</span>(Name, <span class="st">"William"</span>, <span class="st">"Will"</span>), <span class="at">Name =</span> <span class="fu">str_replace_all</span>(Name, <span class="st">"Matthew"</span>, <span class="st">"Matt"</span>), <span class="at">Name =</span> <span class="fu">str_replace_all</span>(Name, <span class="st">"Isabella"</span>, <span class="st">"Bella"</span>), <span class="at">Name =</span> <span class="fu">str_replace_all</span>(Name, <span class="st">"Jonathan"</span>, <span class="st">"Johnny"</span>))</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Checking to see if everything worked</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(general_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Name   Salary   Age
+  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1 Will    63002    22
+2 Matt    76000    23
+3 Connor  58020    25
+4 Bella  105000    26
+5 Olivia 113000    26
+6 Daniel 118220    27</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything has worked out.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

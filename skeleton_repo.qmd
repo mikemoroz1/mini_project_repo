@@ -82,6 +82,8 @@ write_csv(william, "Tables/william.csv")
 
 will_data = read_csv("Tables/william.csv")
 
+print(will_data)
+
 ```
 
 #### Question #3
@@ -336,6 +338,36 @@ general_data = general_data %>%
 
 general_data = general_data %>%
   pivot_wider(names_from = "name", values_from = "value") %>% arrange(Age) 
+
+print(general_data)
+
+```
+
+#### Question #9
+
+Use 'stringr' functions to transform the data at your own discretion. 
+
+```{r question-9}
+
+#| label: question-9
+
+## Now I am going to have some fun with the data and use stringr functions to get some better insights into the data. 
+
+## First I want to understand how many characters are in each person's name. I can do this using str_length. 
+## Code reference: https://stringr.tidyverse.org 
+
+str_length(general_data$Name)
+
+## Interesting. Now I'm going to replace longer names with shorter names (for example, change "William" to "Will". I will do this for William, Matthew, Isabella, and Jonathan. 
+
+general_data = general_data %>%
+  mutate(Name = str_replace_all(Name, "William", "Will"), Name = str_replace_all(Name, "Matthew", "Matt"), Name = str_replace_all(Name, "Isabella", "Bella"), Name = str_replace_all(Name, "Jonathan", "Johnny"))
+
+## Checking to see if everything worked
+
+head(general_data)
+
+## Everything has worked out.
 
 ```
 
