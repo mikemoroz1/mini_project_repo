@@ -300,5 +300,42 @@ while (mikes_age > 1) {
 
 ```
 
+#### Question #8
 
+Use dplyr and tidyr functions to modify the 'admissions_data' data set, then combine them together in one data transformation pipeline. 
+
+```{r question-8}
+
+#| label: question-8
+
+## First I'm going to use three different dplyr functions to work with the data: mutate, select and arrange. 
+
+## I'm going to use mutate to add a new column that adds an age for each person in the data set.
+
+admissions_data = admissions_data %>%
+  mutate(Age = c(22, 28, 29, 26, 26, 27, 28, 23, 25, 35, 37, 33))
+
+## Now I'm going to use select to pick three variables and add them to a new data set. 
+
+general_data = admissions_data %>%
+  select(Name, Age, Salary)
+
+## Next I'm going to use arrange to change the order of the rows in the newly created 'general_data' data set. 
+
+general_data = general_data %>%
+  arrange(Name)
+
+## Now the data set is organized alphabetically from A to Z. 
+
+## Moving ahead, I'm going to use a tidyr function to change the layout of the newly created data set.
+
+general_data = general_data %>%
+  pivot_longer(Age) 
+
+## Now I'm going to use a combination of tidyr and dplyr functions to fix the 'general_data' data set back to its original form, and this time sort by age from lowest to highest. 
+
+general_data = general_data %>%
+  pivot_wider(names_from = "name", values_from = "value") %>% arrange(Age) 
+
+```
 
