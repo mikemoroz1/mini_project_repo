@@ -241,7 +241,7 @@ dbl (1): Numeric
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-3</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">## install.packages("ggplot2")</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggplot2")</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>admissions_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"William"</span>, <span class="st">"Jonathan"</span>, <span class="st">"Martin"</span>, <span class="st">"Olivia"</span>, <span class="st">"Isabella"</span>, <span class="st">"Daniel"</span>, <span class="st">"Paige"</span>, <span class="st">"Matthew"</span>, <span class="st">"Connor"</span>), <span class="at">GPA =</span> <span class="fu">c</span>(william_gpa, <span class="fl">3.95</span>, <span class="fl">3.63</span>, <span class="fl">3.99</span>, <span class="fl">3.54</span>, <span class="fl">3.77</span>, <span class="fl">3.81</span>, <span class="fl">3.13</span>, <span class="fl">3.31</span>), <span class="at">LSAT =</span> <span class="fu">c</span>(<span class="dv">167</span>, <span class="dv">176</span>, <span class="dv">170</span>, <span class="dv">179</span>, <span class="dv">168</span>, <span class="dv">171</span>, <span class="dv">175</span>, <span class="dv">154</span>, <span class="dv">162</span>), <span class="at">Extras =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>), <span class="at">Salary =</span> <span class="fu">c</span>(<span class="dv">63002</span>, <span class="dv">155387</span>, <span class="dv">122098</span>, <span class="dv">113000</span>, <span class="dv">105000</span>, <span class="dv">118220</span>, <span class="dv">94562</span>, <span class="dv">76000</span>, <span class="dv">58020</span>), <span class="at">School =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
@@ -648,6 +648,101 @@ Attaching package: 'scales'</code></pre>
 Levels: Lawyer Doctor Non-DL</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything worked. We know most people are lawyers in the data set, and the above code makes this same determination. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="question-11" class="level4">
+<h4 class="anchored" data-anchor-id="question-11">Question #11</h4>
+<p>Make some interesting plots of the data using ggplot2. Be sure to show different types of figures, multi-variable plots, and use dynamic aesthetics to group data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-11</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to try making multivariable plots with data from my 'general_data' and 'general_counts' data sets. First, I am going to plot a bar graph of the number of observations I have in each profession category.</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(general_counts, <span class="fu">aes</span>(<span class="at">x =</span> Profession, <span class="at">y =</span> n)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Profession Type"</span>, <span class="at">y =</span> <span class="st">"Number of People"</span>, <span class="at">title =</span> <span class="st">"Figure 3: Profession Distribution"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skeleton_repo_files/figure-html/question-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok so this is the first bar graph, with Profession as a category and the number in each category dictating the y-axis. I ran into a minor problem with geom_bar(), where I had to specify 'stat = identity' so that it knew to count observations from n, but other than that everything worked out. Attached below is the code reference I used to figure out how to resolve this problem. </span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://stackoverflow.com/questions/59008974/why-is-stat-identity-necessary-in-geom-bar-in-ggplot </span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to make a scatter plot that shows salaries for each profession.</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="do">## I will also need the 'scales' package to fix my y-axis</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(general_data, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Salary, <span class="at">color =</span> Profession)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 4: Salary with Age and Profession"</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>comma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skeleton_repo_files/figure-html/question-11-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to slightly modify my data set so that I can also group by college attended. For data visualization purposes, let's say the doctors went to Northwestern University instead of the University of Chicago. I will now add a new column to my data set called College. </span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">College =</span> <span class="fu">c</span>(<span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Chicago"</span>, <span class="st">"Northwestern"</span>, <span class="st">"Northwestern"</span>, <span class="st">"Northwestern"</span>))</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to plot the data using multiple aesthetics in the same plot. </span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(general_data, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Salary, <span class="at">color =</span> Profession, <span class="at">shape =</span> College)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 5: Salary with Age, Profession and College"</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>comma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skeleton_repo_files/figure-html/question-11-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="question-12" class="level4">
+<h4 class="anchored" data-anchor-id="question-12">Question #12</h4>
+<p>Use facets to modify your plots.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-12</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok now I'm going to try some different facets so that I can better understand how to use them in preparation for my final project.</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://www.datacamp.com/tutorial/facets-ggplot-r</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="do">## First I need to specify the measure I want to use for facetting. But before I do this, let me make some hypothetical college debt that I can add for each person in my data set. </span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Debt =</span> <span class="fu">c</span>(<span class="dv">122067</span>, <span class="dv">113004</span>, <span class="dv">102000</span>, <span class="dv">289005</span>, <span class="dv">277086</span>, <span class="dv">255038</span>, <span class="dv">312001</span>, <span class="dv">243001</span>, <span class="dv">235000</span>, <span class="dv">602005</span>, <span class="dv">735055</span>, <span class="dv">585021</span>))</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>genera_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(Debt, <span class="at">.after =</span> Salary)</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok now I can make my facet measure. </span></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>specification <span class="ot">=</span> <span class="fu">gather</span>(general_data, <span class="at">key =</span> <span class="st">"specify"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="fu">c</span>(<span class="st">"Salary"</span>, <span class="st">"Debt"</span>))</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Plotting with 'facet_wrap'</span></span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(specification, <span class="fu">aes</span>(<span class="at">x =</span> College, <span class="at">y =</span> value)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">'identity'</span>, <span class="at">fill =</span> <span class="st">'light blue'</span>) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>specify) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Capital (USD)"</span>, <span class="at">x =</span> <span class="st">"College"</span>, <span class="at">title =</span> <span class="st">"Figure 6: Facet Plots of Debt and Salary"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skeleton_repo_files/figure-html/question-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Using 'facet_grid'</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://ggplot2.tidyverse.org/reference/facet_grid.html </span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(general_data, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Salary, <span class="at">color =</span> Profession)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(College)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"Salary (USD)"</span>, <span class="at">title =</span> <span class="st">"Figure 6: Facet Plots of Salary with Age, Profession, and College"</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>comma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skeleton_repo_files/figure-html/question-12-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok those are two examples of how I can apply facets to my data. Moving to the next question. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

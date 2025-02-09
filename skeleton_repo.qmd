@@ -109,7 +109,7 @@ Ten years after graduation, William is currently unhappy in his job as a bank ma
 
 #| label: question-3
 
-## install.packages("ggplot2")
+# install.packages("ggplot2")
 library(ggplot2)
 
 admissions_data <- data.frame(Name = c("William", "Jonathan", "Martin", "Olivia", "Isabella", "Daniel", "Paige", "Matthew", "Connor"), GPA = c(william_gpa, 3.95, 3.63, 3.99, 3.54, 3.77, 3.81, 3.13, 3.31), LSAT = c(167, 176, 170, 179, 168, 171, 175, 154, 162), Extras = c(2, 5, 2, 0, 3, 4, 2, 3, 5), Salary = c(63002, 155387, 122098, 113000, 105000, 118220, 94562, 76000, 58020), School = c(0, 1, 1, 1, 1, 1, 1, 0, 0))
@@ -405,4 +405,72 @@ fct_infreq(general_data$Profession)
 
 ```
 
+#### Question #11
 
+Make some interesting plots of the data using ggplot2. Be sure to show different types of figures, multi-variable plots, and use dynamic aesthetics to group data. 
+
+```{r question-11}
+
+#| label: question-11
+
+## Now I'm going to try making multivariable plots with data from my 'general_data' and 'general_counts' data sets. First, I am going to plot a bar graph of the number of observations I have in each profession category.
+
+library(ggplot2)
+
+ggplot(general_counts, aes(x = Profession, y = n)) + geom_bar(stat = "identity") + labs(x = "Profession Type", y = "Number of People", title = "Figure 3: Profession Distribution")
+
+## Ok so this is the first bar graph, with Profession as a category and the number in each category dictating the y-axis. I ran into a minor problem with geom_bar(), where I had to specify 'stat = identity' so that it knew to count observations from n, but other than that everything worked out. Attached below is the code reference I used to figure out how to resolve this problem. 
+## Code reference: https://stackoverflow.com/questions/59008974/why-is-stat-identity-necessary-in-geom-bar-in-ggplot 
+
+## Now I'm going to make a scatter plot that shows salaries for each profession.
+## I will also need the 'scales' package to fix my y-axis
+
+library(scales)
+
+ggplot(general_data, aes(x = Age, y = Salary, color = Profession)) + geom_point() + labs(x = "Age", y = "Salary (USD)", title = "Figure 4: Salary with Age and Profession") + scale_y_continuous(labels=comma)
+
+## Now I'm going to slightly modify my data set so that I can also group by college attended. For data visualization purposes, let's say the doctors went to Northwestern University instead of the University of Chicago. I will now add a new column to my data set called College. 
+
+general_data = general_data %>%
+  mutate(College = c("Chicago", "Chicago", "Chicago", "Chicago", "Chicago", "Chicago", "Chicago", "Chicago", "Chicago", "Northwestern", "Northwestern", "Northwestern"))
+
+## Now I'm going to plot the data using multiple aesthetics in the same plot. 
+
+ggplot(general_data, aes(x = Age, y = Salary, color = Profession, shape = College)) + geom_point() + labs(x = "Age", y = "Salary (USD)", title = "Figure 5: Salary with Age, Profession and College") + scale_y_continuous(labels=comma)
+
+``` 
+
+#### Question #12
+
+Use facets to modify your plots.
+
+```{r question-12}
+
+#| label: question-12
+
+## Ok now I'm going to try some different facets so that I can better understand how to use them in preparation for my final project.
+## Code reference: https://www.datacamp.com/tutorial/facets-ggplot-r
+
+## First I need to specify the measure I want to use for facetting. But before I do this, let me make some hypothetical college debt that I can add for each person in my data set. 
+
+general_data = general_data %>%
+  mutate(Debt = c(122067, 113004, 102000, 289005, 277086, 255038, 312001, 243001, 235000, 602005, 735055, 585021))
+
+genera_data = general_data %>% relocate(Debt, .after = Salary)
+
+## Ok now I can make my facet measure. 
+
+specification = gather(general_data, key = "specify", value = "value", c("Salary", "Debt"))
+
+## Plotting with 'facet_wrap'
+
+ggplot(specification, aes(x = College, y = value)) + geom_bar(stat = 'identity', fill = 'light blue') + facet_wrap(~specify) + labs(y = "Capital (USD)", x = "College", title = "Figure 6: Facet Plots of Debt and Salary")
+
+## Using 'facet_grid'
+## Code reference: https://ggplot2.tidyverse.org/reference/facet_grid.html 
+
+ggplot(general_data, aes(x = Age, y = Salary, color = Profession)) + geom_point() + facet_grid(cols = vars(College)) + labs(x = "Age", y = "Salary (USD)", title = "Figure 6: Facet Plots of Salary with Age, Profession, and College") + scale_y_continuous(labels=comma)
+
+## Ok those are two examples of how I can apply facets to my data. Moving to the next question. 
+
+```
