@@ -608,6 +608,48 @@ Attaching package: 'scales'</code></pre>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything has worked out.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="question-10" class="level4">
+<h4 class="anchored" data-anchor-id="question-10">Question #10</h4>
+<p>Use two ‘forcats’ functions to transform the data at your own discretion.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: question-10</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Ok now I'm going to use two different 'forcats' functions, and use them in data transformation pipelines.</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Code reference: https://forcats.tidyverse.org </span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="do">## First I need to make a new column, "Profession", that has information about each person's profession. I will assign three categories: Doctor, Lawyer, and Non-DL</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>general_data <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Profession =</span> <span class="fu">c</span>(<span class="st">"Non-DL"</span>, <span class="st">"Non-DL"</span>, <span class="st">"Non-DL"</span>, <span class="st">"Lawyer"</span>, <span class="st">"Lawyer"</span>, <span class="st">"Lawyer"</span>, <span class="st">"Lawyer"</span>, <span class="st">"Lawyer"</span>, <span class="st">"Lawyer"</span>, <span class="st">"Doctor"</span>, <span class="st">"Doctor"</span>, <span class="st">"Doctor"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Profession =</span> <span class="fu">as.factor</span>(Profession))</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I'm going to use 'fct_lump' to count the number of people in each profession, and I will do this within a data transformation pipeline.</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>general_counts <span class="ot">=</span> general_data <span class="sc">%&gt;%</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Profession =</span> <span class="fu">fct_lump</span>(Profession, <span class="at">n =</span> <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Profession)</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(general_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  Profession     n
+  &lt;fct&gt;      &lt;int&gt;
+1 Doctor         3
+2 Lawyer         6
+3 Non-DL         3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything looks good. Now I know that there are three doctors, six lawyers, and three non-doctors or lawyers. </span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Now I just need to use one more 'forcats' function. I will use 'fct_infreq' in a similar fashion to tell me which factor has the most observations, with the factor with the highest number of observations coming first. </span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fct_infreq</span>(general_data<span class="sc">$</span>Profession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Non-DL Non-DL Non-DL Lawyer Lawyer Lawyer Lawyer Lawyer Lawyer Doctor
+[11] Doctor Doctor
+Levels: Lawyer Doctor Non-DL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Everything worked. We know most people are lawyers in the data set, and the above code makes this same determination. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 
 

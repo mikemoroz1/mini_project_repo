@@ -371,3 +371,38 @@ head(general_data)
 
 ```
 
+#### Question #10 
+
+Use two 'forcats' functions to transform the data at your own discretion. 
+
+```{r question-10}
+
+#| label: question-10
+
+## Ok now I'm going to use two different 'forcats' functions, and use them in data transformation pipelines.
+## Code reference: https://forcats.tidyverse.org 
+
+## First I need to make a new column, "Profession", that has information about each person's profession. I will assign three categories: Doctor, Lawyer, and Non-DL
+
+general_data = general_data %>%
+  mutate(Profession = c("Non-DL", "Non-DL", "Non-DL", "Lawyer", "Lawyer", "Lawyer", "Lawyer", "Lawyer", "Lawyer", "Doctor", "Doctor", "Doctor")) %>% mutate(Profession = as.factor(Profession))
+
+## Now I'm going to use 'fct_lump' to count the number of people in each profession, and I will do this within a data transformation pipeline.
+
+general_counts = general_data %>%
+  mutate(Profession = fct_lump(Profession, n = 3)) %>%
+  count(Profession)
+
+head(general_counts)
+
+## Everything looks good. Now I know that there are three doctors, six lawyers, and three non-doctors or lawyers. 
+
+## Now I just need to use one more 'forcats' function. I will use 'fct_infreq' in a similar fashion to tell me which factor has the most observations, with the factor with the highest number of observations coming first. 
+
+fct_infreq(general_data$Profession)
+
+## Everything worked. We know most people are lawyers in the data set, and the above code makes this same determination. 
+
+```
+
+
