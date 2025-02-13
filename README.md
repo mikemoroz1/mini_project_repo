@@ -29,11 +29,17 @@ were generated in the code.
 -   [mini-project-repo]
     -   .gitignore
     -   .Rhistory
+    -   meme.png (Can't open because I specified such in the .gitignore)
     -   .README.md
     -   [skeleton_repo_files]
         -   [figure-html]
             -   question-3-1.png
             -   question-4-1.png
+            -   question-11-1.png
+            -   question-11-2.png
+            -   question-11-3.png
+            -   question-12-1.png
+            -   question-12.2.png
         -   [libs]
             -   [bootstrap]
                 -   bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css

@@ -17,6 +17,8 @@ William is a student at the University of Chicago. William just finished taking 
 
 **Causal Inference**: A- **Introduction to Python Programming**: B **From Data to Manuscript in R**: B+
 
+To answer this question, I need to...
+
 1.  Make a data frame with William's class, grade and quarter information.
 2.  Convert William's letter grades to a numeric GPA using the standard A-grade conversion scale.
 3.  Add William's letter grades as a column to the data frame.
@@ -100,10 +102,12 @@ Ten years after graduation, William is currently unhappy in his job as a bank ma
 -   Matthew had a 3.13 GPA, scored 154 on the LSAT, and participated in 3 extracurricular activities. He currently makes \$76,000 as a supermarket manager.
 -   Connor had a 3.31 GPA, scored 162 on the LSAT, and participated in 5 extracurricular activities. He currently makes \$58,020 as a mortgage analyst.
 
+To answer this question? I need to...
+
 1.  Make a data frame including each person's name, GPA, LSAT, extracurricular activity participation, salary and law school status as columns.
 2.  Run a regression to determine whether there are any significant predictors of salary.
-3.  Plot your desired model and impose a line of best fit.
-4.  Write up the results of your regression analysis.
+3.  Plot my desired model and impose a line of best fit.
+4.  Write up the results of my regression analysis.
 
 ```{r question-3, fig.align = 'center', echo=FALSE}
 
@@ -164,11 +168,13 @@ The estimate of the coefficient for law school attendance was *b* = 52,370, *s~b
 
 #### Question #4
 
-William has three other friends that are medical doctors. Their information are as follows:
+William has three other friends that are medical doctors. How would they compare on salary? Their information are as follows:
 
 -   Tyrell had a 3.91 GPA, never took the LSAT, and participated in 5 extracurricular activities. He currently makes \$388,267 as a cardiologist.
 -   Savannah had a 3.85 GPA, never took the LSAT, and participated in 4 extracurricular activities. She currently makes \$422,001 as an oncologist.
 -   Gerald had a 3.89 GPA, never took the LSAT, and participated in 3 extracurricular activities. He currently makes \$543,022 as a dermatologist.
+
+To answer this question, I need to...
 
 1.  Add William's doctor friends to the data frame.
 2.  Perform an ANOVA to determine whether there are differences in salary between lawyers, doctors, and non-lawyers or non-doctors.
