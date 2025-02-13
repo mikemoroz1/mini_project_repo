@@ -22,7 +22,7 @@ William is a student at the University of Chicago. William just finished taking 
 3.  Add William's letter grades as a column to the data frame.
 4.  Calculate William's fall quarter GPA.
 
-```{r question-1}
+```{r question-1, echo=FALSE}
 
 #| label: question-1
 
@@ -66,7 +66,7 @@ print(equal_test)
 
 Write the newly created data frame to a csv.
 
-```{r question-2}
+```{r question-2, echo=FALSE}
 
 #| label: question-2
 
@@ -105,7 +105,7 @@ Ten years after graduation, William is currently unhappy in his job as a bank ma
 3.  Plot your desired model and impose a line of best fit.
 4.  Write up the results of your regression analysis.
 
-```{r question-3}
+```{r question-3, fig.align = 'center', echo=FALSE}
 
 #| label: question-3
 
@@ -119,6 +119,7 @@ write_csv(admissions_data, "Tables/admissions_data.csv")
 ## The data frame has been created with everyone's information. School is coded as a yes/no variable, with 0 meaning the person is not a lawyer, and 1 meaning the person is.  
 
 ## Now I will run a linear regression to identify significant indicators of salary.
+## A linear regression is what I want because I can use categorical and continuous predictors to predict a continuous variable, which works in this case because I am interested in predicting salary. 
 ## Hypothesis: Law school status, but not the other predictors, will be a significant predictor of salary. 
 ## Code reference: https://www.datacamp.com/tutorial/linear-regression-R 
 
@@ -173,7 +174,7 @@ William has three other friends that are medical doctors. Their information are 
 2.  Perform an ANOVA to determine whether there are differences in salary between lawyers, doctors, and non-lawyers or non-doctors.
 3.  Plot the results.
 
-```{r question-4}
+```{r question-4, fig.align = 'center', echo=FALSE}
 
 #| label: question-4
 
@@ -194,7 +195,7 @@ admissions_data = admissions_data %>%
 anova = aov(Salary ~ School, data = admissions_data)
 summary(anova)
 
-## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. 
+## There are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set.
 
 ## Plotting the results
 ## Using the scales package because it allows me to change x and y axis ticks quite efficiently.
@@ -203,13 +204,15 @@ library(scales)
 
 ggplot(admissions_data, aes(x = School, y = Salary)) + geom_point() + labs(x = "School Type (0 = Other, 1 = Law, 2 = Medical)", y = "Salary (USD)", title = "Figure 2: Salary from School Type") + stat_summary(fun.data = 'mean_se', geom = 'errorbar', width = 0.2) + scale_y_continuous(labels=comma) + scale_x_continuous(breaks = unique(admissions_data$School))
 
+## Since the error bars do not overlap between plots, the plot reaffirms the ANOVA's results that there are statistically significant differences between lawyers, doctors, and non-lawyers or non-doctors on salary in this hypothetical data set. 
+
 ```
 
 #### Question #5
 
 Use a code chunk and R-Markdown to demonstrate in-line code, lists, and footnotes in Markdown.
 
-```{r question-5}
+```{r question-5, echo=FALSE}
 
 #| label: question-5
 
@@ -250,7 +253,7 @@ My name is **`r mikes_list[1]`** and I have a dog named *`r mikes_list[2]`*. `r 
 
 Make a mathematical function that calculates GPA with any desired input.
 
-```{r question-6}
+```{r question-6, echo=FALSE}
 
 #| label: question-6
 
@@ -278,7 +281,7 @@ gpa_calculator("Diana", "Winter", 4.0, 3.3, 3.7)
 
 Practice your loop skills by using multiple loops in the same chunk of code.
 
-```{r question-7}
+```{r question-7, echo=FALSE}
 
 #| label: question-7
 
@@ -304,9 +307,9 @@ while (mikes_age > 1) {
 
 #### Question #8
 
-Use dplyr and tidyr functions to modify the 'admissions_data' data set, then combine them together in one data transformation pipeline. 
+Use dplyr and tidyr functions to modify the 'admissions_data' data set, then combine them together in one data transformation pipeline.
 
-```{r question-8}
+```{r question-8, echo=FALSE}
 
 #| label: question-8
 
@@ -345,9 +348,9 @@ print(general_data)
 
 #### Question #9
 
-Use 'stringr' functions to transform the data at your own discretion. 
+Use 'stringr' functions to transform the data at your own discretion.
 
-```{r question-9}
+```{r question-9, echo=FALSE}
 
 #| label: question-9
 
@@ -371,11 +374,11 @@ head(general_data)
 
 ```
 
-#### Question #10 
+#### Question #10
 
-Use two 'forcats' functions to transform the data at your own discretion. 
+Use two 'forcats' functions to transform the data at your own discretion.
 
-```{r question-10}
+```{r question-10, echo=FALSE}
 
 #| label: question-10
 
@@ -403,13 +406,17 @@ fct_infreq(general_data$Profession)
 
 ## Everything worked. We know most people are lawyers in the data set, and the above code makes this same determination. 
 
+## Double checking frequencies to make sure they match:
+
+summary(general_data$Profession)
+
 ```
 
 #### Question #11
 
-Make some interesting plots of the data using ggplot2. Be sure to show different types of figures, multi-variable plots, and use dynamic aesthetics to group data. 
+Make some interesting plots of the data using ggplot2. Be sure to show different types of figures, multi-variable plots, and use dynamic aesthetics to group data.
 
-```{r question-11}
+```{r question-11, fig.align = 'center', echo=FALSE}
 
 #| label: question-11
 
@@ -438,13 +445,13 @@ general_data = general_data %>%
 
 ggplot(general_data, aes(x = Age, y = Salary, color = Profession, shape = College)) + geom_point() + labs(x = "Age", y = "Salary (USD)", title = "Figure 5: Salary with Age, Profession and College") + scale_y_continuous(labels=comma)
 
-``` 
+```
 
 #### Question #12
 
 Use facets to modify your plots.
 
-```{r question-12}
+```{r question-12, fig.align = 'center', echo=FALSE}
 
 #| label: question-12
 
@@ -469,7 +476,7 @@ ggplot(specification, aes(x = College, y = value)) + geom_bar(stat = 'identity',
 ## Using 'facet_grid'
 ## Code reference: https://ggplot2.tidyverse.org/reference/facet_grid.html 
 
-ggplot(general_data, aes(x = Age, y = Salary, color = Profession)) + geom_point() + facet_grid(cols = vars(College)) + labs(x = "Age", y = "Salary (USD)", title = "Figure 6: Facet Plots of Salary with Age, Profession, and College") + scale_y_continuous(labels=comma)
+ggplot(general_data, aes(x = Age, y = Salary, color = Profession)) + geom_point() + facet_grid(cols = vars(College)) + labs(x = "Age", y = "Salary (USD)", title = "Figure 6: Facet Plots of Salary with Age, Profession, and College") + scale_y_continuous(labels=comma) + theme(plot.title = element_text(size = 11.5))
 
 ## Ok those are two examples of how I can apply facets to my data. Moving to the next question. 
 
